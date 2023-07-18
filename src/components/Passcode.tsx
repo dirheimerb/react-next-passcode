@@ -1,114 +1,114 @@
-"use client";
+'use client'
 import React, {
   useRef,
   useState,
   KeyboardEvent,
   BaseSyntheticEvent,
-} from "react";
+} from 'react'
 
 export default function Passcode() {
   const [arrayValue, setArrayValue] = useState<(string | number)[]>([
-    "",
-    "",
-    "",
-    "",
-  ]);
+    '',
+    '',
+    '',
+    '',
+  ])
   const [maskedValue, setMaskedValue] = useState<(string | number)[]>([
-    "",
-    "",
-    "",
-    "",
-  ]);
-  const [showTooltip, setShowTooltip] = useState(false);
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+    '',
+    '',
+    '',
+    '',
+  ])
+  const [showTooltip, setShowTooltip] = useState(false)
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([])
 
   React.useEffect(() => {
-    inputRefs.current[0]?.focus();
-  }, []);
+    inputRefs.current[0]?.focus()
+  }, [])
 
   const onPaste = (e: React.ClipboardEvent, index: number) => {
-    e.preventDefault();
-    const paste = e.clipboardData.getData("text").split("");
+    e.preventDefault()
+    const paste = e.clipboardData.getData('text').split('')
     if (paste.every((item) => !isNaN(Number(item)))) {
-      let newInputValue = [...arrayValue];
-      let newMaskedValue = [...maskedValue];
+      let newInputValue = [...arrayValue]
+      let newMaskedValue = [...maskedValue]
       for (let i = 0; i < paste.length; i++) {
         if (index + i < arrayValue.length) {
-          newInputValue[index + i] = paste[i];
-          newMaskedValue[index + i] = "*";
+          newInputValue[index + i] = paste[i]
+          newMaskedValue[index + i] = '*'
         }
       }
-      setArrayValue(newInputValue);
-      setMaskedValue(newMaskedValue);
+      setArrayValue(newInputValue)
+      setMaskedValue(newMaskedValue)
     }
-  };
+  }
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    const keyCode = parseInt(e.key);
+    const keyCode = parseInt(e.key)
     if (
-      e.key !== "Backspace" &&
-      e.key !== "Delete" &&
-      e.key !== "Tab" &&
-      !(e.metaKey && e.key === "v") &&
+      e.key !== 'Backspace' &&
+      e.key !== 'Delete' &&
+      e.key !== 'Tab' &&
+      !(e.metaKey && e.key === 'v') &&
       !(keyCode >= 0 && keyCode <= 9)
     ) {
-      e.preventDefault();
-      setShowTooltip(true);
-      setTimeout(() => setShowTooltip(false), 2000);
+      e.preventDefault()
+      setShowTooltip(true)
+      setTimeout(() => setShowTooltip(false), 2000)
     }
-  };
+  }
 
   const onChange = (e: BaseSyntheticEvent, index: number) => {
-    const input = e.target.value;
+    const input = e.target.value
 
     if (!isNaN(input)) {
       setArrayValue((preValue: (string | number)[]) => {
-        const newArray = [...preValue];
-        newArray[index] = input;
-        return newArray;
-      });
+        const newArray = [...preValue]
+        newArray[index] = input
+        return newArray
+      })
 
       setMaskedValue((prevValue: (string | number)[]) => {
-        const newArray = [...prevValue];
-        newArray[index] = "*";
-        return newArray;
-      });
+        const newArray = [...prevValue]
+        newArray[index] = '*'
+        return newArray
+      })
 
-      if (input !== "" && index < arrayValue.length - 1) {
-        inputRefs.current[index + 1]?.focus();
+      if (input !== '' && index < arrayValue.length - 1) {
+        inputRefs.current[index + 1]?.focus()
       }
     }
-  };
+  }
 
   const onKeyUp = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
-    if (e.key === "Backspace" || e.key === "Delete") {
+    if (e.key === 'Backspace' || e.key === 'Delete') {
       setArrayValue((prevValue: (string | number)[]) => {
-        const newArray = [...prevValue];
-        newArray[index] = "";
-        return newArray;
-      });
+        const newArray = [...prevValue]
+        newArray[index] = ''
+        return newArray
+      })
 
       setMaskedValue((prevValue: (string | number)[]) => {
-        const newArray = [...prevValue];
-        newArray[index] = "";
-        return newArray;
-      });
+        const newArray = [...prevValue]
+        newArray[index] = ''
+        return newArray
+      })
 
       if (index > 0) {
-        inputRefs.current[index - 1]?.focus();
+        inputRefs.current[index - 1]?.focus()
       }
     }
-  };
+  }
   const resetInputs = () => {
-    setArrayValue(["", "", "", ""]);
-    setMaskedValue(["", "", "", ""]);
-    inputRefs.current[0]?.focus();
-  };
+    setArrayValue(['', '', '', ''])
+    setMaskedValue(['', '', '', ''])
+    inputRefs.current[0]?.focus()
+  }
 
   const handleSubmit = () => {
-    console.log(arrayValue.join(""));
+    console.log(arrayValue.join(''))
     // TODO: Add your Database logic here
-  };
+  }
 
   return (
     <div className="flex flex-wrap space-x-2">
@@ -162,5 +162,5 @@ export default function Passcode() {
         </div>
       )}
     </div>
-  );
+  )
 }
